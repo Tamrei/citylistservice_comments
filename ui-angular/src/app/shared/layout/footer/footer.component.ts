@@ -18,7 +18,7 @@ export class FooterComponent implements OnDestroy {
     });
   }
 
-  private readonly FIVE_SECONDS = 5000;
+  private readonly FIVE_SECONDS = 5000; // move to separated const
   healthStatus = HealthStatus.loading;
   today: number = Date.now();
   healthStatusSub: Subscription;

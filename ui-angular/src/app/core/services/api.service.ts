@@ -10,6 +10,7 @@ import {LoggingService} from './logging.service';
   providedIn: 'root'
 })
 export class ApiService {
+
   constructor(private http: HttpClient, private loggingService: LoggingService) {
   }
 
@@ -39,7 +40,9 @@ export class ApiService {
     ).pipe(catchError(this.handleError(url, 'PUT')));
   }
 
-  post(path: string, body: Object = {}): Observable<any> {
+  // better to use object type instead of Object
+  // also unknown is preferred over any
+  post(path: string, body: object = {}): Observable<unknown> {
     const url = `${environment.apiUrl}${path}`;
     return this.http.post(
       url,
@@ -54,6 +57,7 @@ export class ApiService {
       .pipe(catchError(this.handleError(url, 'DELETE')));
   }
 
+  // application/json is default Content-Type for angular http client, so no need to specify it additionally
   private get headers(): HttpHeaders {
     return new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
   }

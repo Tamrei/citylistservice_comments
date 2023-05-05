@@ -7,6 +7,7 @@ import {CitySearchRequest, SearchType} from "../../core/models/city-search-reque
 import {PageEvent} from "@angular/material/paginator";
 import {PageableRequest} from "../../core/models/pageable-request";
 import {ActivatedRoute, Router} from "@angular/router";
+import { Observable, switchMap } from 'rxjs';
 
 @Component({
   selector: 'cities-view',
@@ -34,7 +35,10 @@ export class CitiesViewComponent implements OnInit {
       this.pageRequestParams.page = params['page'] || 0;
       this.pageRequestParams.size = params['size'] || 12;
     });
-    this.getCities();
+    // this.getCities();
+
+    // this.initSearchCity();
+    // this.searchCityEvent$.next();
   }
 
   getCities(): void {
@@ -63,13 +67,35 @@ export class CitiesViewComponent implements OnInit {
 
   handleCitySearchEvent($citySearchEvent: CitySearchRequest) {
     this.citySearchParams = $citySearchEvent;
+
+    // possible race condition since if user click on pagination button second request will be triggered
+    // it's better to use switch map approach here. Example below:
+    // trigger http request by 'this.searchCityEvent$.next();'
+    // private searchCityEvent$ = new Observable<void>();
+    //
+    // private initSearchCity(): void {
+    //     // in way whenever new searchCityEvent$ is pushed, prev request will be canceled and replaced with new one
+    //     this.searchCityEvent$.pipe(switchMap(() => this.cityService.getCities(this.mergeAndGetRequestParams())))
+    //       .subscribe(
+    //         {
+    //           next: (response: Page<CityResponse>) => this.setCitiesPageResponse(response),
+    //           error: () => {
+    //             this.isError = true;
+    //           },
+    //           complete: () => this.areCitiesLoaded = true
+    //         }
+    //       );
+    //   }
     this.getCities();
-    this.router.navigate([],
+    // it's better to perform navigation when request
+
+    // code duplication in handlePageEvent();
+    void this.router.navigate([],
       {
         relativeTo: this.route,
         queryParams: this.mergeAndGetRequestParams(),
         queryParamsHandling: 'merge',
-      }).then()
+      });
   }
 
   handlePageEvent($pageEvent: PageEvent) {
@@ -77,7 +103,7 @@ export class CitiesViewComponent implements OnInit {
     this.pageRequestParams.page = $pageEvent.pageIndex;
     this.pageRequestParams.size = $pageEvent.pageSize;
     this.getCities();
-    this.router.navigate([],
+    void this.router.navigate([],
       {
         relativeTo: this.route,
         queryParams: this.mergeAndGetRequestParams(),
@@ -85,6 +111,8 @@ export class CitiesViewComponent implements OnInit {
         // preserve the existing query params in the route
         // skipLocationChange: true
         // do not trigger navigation
-      }).then()
+      });
   }
+
+
 }

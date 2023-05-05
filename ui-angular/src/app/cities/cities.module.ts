@@ -33,6 +33,7 @@ import {NgOptimizedImage} from "@angular/common";
         MatPaginatorModule,
         NgOptimizedImage
     ],
+  // formatting ?
   declarations: [
     CitiesViewComponent,
     CityListComponent,

@@ -3,7 +3,9 @@ export interface CitySearchRequest {
   searchType: string;
 }
 
-export class SearchType {
-  public static LIKE_IGNORE_CASE = "LIKE_IGNORE_CASE";
-  public static STARTS_WITH_IGNORE_CASE = "STARTS_WITH_IGNORE_CASE";
-}
+// export class SearchType {
+//   public static LIKE_IGNORE_CASE = "LIKE_IGNORE_CASE";
+//   public static STARTS_WITH_IGNORE_CASE = "STARTS_WITH_IGNORE_CASE";
+// }
+
+export type SearchType = 'LIKE_IGNORE_CASE' | 'STARTS_WITH_IGNORE_CASE';

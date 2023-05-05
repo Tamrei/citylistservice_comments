@@ -27,6 +27,7 @@ export class CityEditComponent implements OnInit {
               private location: Location) {
   }
 
+  // should be global config not only for this component, therefore move it to separate shared file
   private readonly _snackBarConfig = {
     horizontalPosition: 'end',
     duration: 3000
@@ -41,7 +42,8 @@ export class CityEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.cityId = Number(this.route.snapshot.paramMap.get('cityId'));
-    this.queryParams = this.location.getState() as Params;
+    // service
+    this.queryParams = this.route.snapshot.queryParams;
     this.cityService.getById(this.cityId).subscribe(
       {
         next: (res) => {
@@ -55,8 +57,8 @@ export class CityEditComponent implements OnInit {
             }
           );
           this.onFormChanged();
-          this.cityUpdatedState = res as CityResponse;
-          this.cityInitialState = {...res as CityResponse};
+          this.cityUpdatedState = res;
+          this.cityInitialState = { ...res };
         },
         error: (err: ApiError) => {
           this.notifyUser(err.message);

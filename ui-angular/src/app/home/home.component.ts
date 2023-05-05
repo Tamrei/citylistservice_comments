@@ -30,6 +30,7 @@ export class HomeComponent {
 
 }
 
+// move to separated file
 export class StackItem {
   name: string;
 
