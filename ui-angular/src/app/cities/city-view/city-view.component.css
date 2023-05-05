@@ -38,4 +38,4 @@
   max-width: 400px;
 }
 
-/*common styles should be moved to shared styles file*/
+/*reusable styles class like margin-bottom-10, margin-top-10 and e.t.c should be moved to shared styles file*/
